@@ -17,67 +17,114 @@ class Car {
         print("Brand - \(brand), Model - \(model), Year - \(year), Speed - \(speed)")
     }
     
-    static func createCar(brand: String, model: String, year: Int, speed: Int) -> Car{
+    static func createCar(brand: String, model: String, year: Int, speed: Int) -> Car {
         return Car(brand: brand, model: model, year: year, speed: speed)
     }
     
     func race(car2: Car) -> Car {
-        if (self.speed > car2.speed) {
+        if self.speed > car2.speed {
             return self
-        } else if (self.speed < car2.speed) {
+        } else if self.speed < car2.speed {
             return car2
+        } else {
+            return Car(brand: "None", model: "None", year: 0, speed: 0) // Indicating a draw
         }
-        return Car(brand: "None", model: "None", year: 0, speed: 0)
     }
-    
-    static func raceCars (cars: [Car]) {
-        for i in 0..<cars.count {
-            for j in (i+1)..<cars.count {
-                let car1 = cars[i]
-                let car2 = cars[j]
+
+    static func organizeRaces(cars: [Car]) {
+        if cars.count % 2 != 0 {
+            print("Need an even number of cars to race.")
+            return
+        }
+        
+        var raceCars = cars.shuffled() // Shuffle cars to create random pairs
+        var winners: [Car] = []
+        
+        while raceCars.count > 1 {
+            for i in stride(from: 0, to: raceCars.count, by: 2) {
+                let car1 = raceCars[i]
+                let car2 = raceCars[i + 1]
                 let winner = car1.race(car2: car2)
+                
                 if winner.brand == "None" {
-                    print("Ничья между \(car1.brand) \(car1.model) и \(car2.brand) \(car1.model)")
+                    print("Draw between \(car1.brand) \(car1.model) and \(car2.brand) \(car2.model)")
                 } else {
-                    print("Победитель между \(car1.brand) \(car1.model) и \(car2.brand) \(car2.model): \(winner.brand) \(winner.model)")
+                    print("Winner between \(car1.brand) \(car1.model) and \(car2.brand) \(car2.model): \(winner.brand) \(winner.model)")
+                    winners.append(winner)
                 }
             }
+            raceCars = winners
+            winners = []
         }
-        var finalWinner: Car = Car(brand: "None", model: "None", year: 0, speed: 0)
-        for car in cars {
-            finalWinner = finalWinner.race(car2: car)
+        
+        if let finalWinner = raceCars.first {
+            if finalWinner.brand != "None" {
+                print("Final Winner: \(finalWinner.brand) \(finalWinner.model)")
+            } else {
+                print("No final winner, all races were draws.")
+            }
         }
-        print("Итоговый победитель: \(finalWinner.brand) \(finalWinner.model)")
     }
-    
-    
 }
 
-class BMW: Car{
+class BMW: Car {
     var enginePower: Int
     
-    init(brand: String, model: String, year: Int, speed: Int, enginePower: Int) {
-            self.enginePower = enginePower
-            super.init(brand: brand, model: model, year: year, speed: speed)
-        }
+    init(model: String, year: Int, speed: Int, enginePower: Int) {
+        self.enginePower = enginePower
+        super.init(brand: "BMW", model: model, year: year, speed: speed)
+    }
+    
+    override func printInfo() {
+        super.printInfo()
+        print("Engine Power - \(enginePower)")
+    }
 }
 
 class Audi: Car {
     var numOfSeats: Int
     
-    init(brand: String, model: String, year: Int, speed: Int, numOfSeats: Int) {
+    init(model: String, year: Int, speed: Int, numOfSeats: Int) {
         self.numOfSeats = numOfSeats
-        super.init(brand: brand, model: model, year: year, speed: speed)
+        super.init(brand: "Audi", model: model, year: year, speed: speed)
+    }
+    
+    override func printInfo() {
+        super.printInfo()
+        print("Number of seats - \(numOfSeats)")
     }
 }
 
-let bmw1 = BMW(brand: "BMW", model: "X5 M50d", year: 2018, speed: 250, enginePower: 400)
-let bmw2 = BMW(brand: "BMW", model: "X3 30d", year: 2017, speed: 240, enginePower: 265)
-let audi1 = Audi(brand: "Audi", model: "RS6 C7", year: 2018, speed: 260, numOfSeats: 5)
-let audi2 = Audi(brand: "Audi", model: "RS7 C8", year: 2019, speed: 305, numOfSeats: 5)
-let audi3 = Audi(brand: "Audi", model: "A4", year: 2001, speed: 187, numOfSeats: 5)
-let car6 = Car(brand: "Toyota", model: "Camry 3.5", year: 2017, speed: 220)
-var cars: [Car] = [bmw1, bmw2, audi1, audi2, audi3, car6]
+class Toyota: Car {
+    var fuelTankVol: Int
+    
+    init(model: String, year: Int, speed: Int, fuelTankVol: Int) {
+        self.fuelTankVol = fuelTankVol
+        super.init(brand: "Toyota", model: model, year: year, speed: speed)
+    }
+}
 
-Car.raceCars(cars: cars)
+class AstonMartin: Car {
+    var driveUnit: String
+    
+    init(model: String, year: Int, speed: Int, driveUnit: String) {
+        self.driveUnit = driveUnit
+        super.init(brand: "Aston Martin", model: model, year: year, speed: speed)
+    }
+}
 
+// Создаем автомобили
+let bmw1 = BMW(model: "X5 M50d", year: 2018, speed: 250, enginePower: 400)
+let bmw2 = BMW(model: "X3 30d", year: 2017, speed: 240, enginePower: 265)
+let audi1 = Audi(model: "RS6 C7", year: 2018, speed: 260, numOfSeats: 5)
+let audi2 = Audi(model: "RS7 C8", year: 2019, speed: 305, numOfSeats: 5)
+let toyota1 = Toyota(model: "Camry 3.5", year: 2017, speed: 220, fuelTankVol: 60)
+let toyota2 = Toyota(model: "Supra", year: 2020, speed: 280, fuelTankVol: 50)
+let astonMartin1 = AstonMartin(model: "V8 Vantage", year: 2017, speed: 314, driveUnit: "Rear drive")
+let astonMartin2 = AstonMartin(model: "DB11", year: 2019, speed: 322, driveUnit: "Rear drive")
+
+// Список всех автомобилей
+var cars: [Car] = [bmw1, bmw2, audi1, audi2, toyota1, toyota2, astonMartin1, astonMartin2]
+
+// Проведение гонок
+Car.organizeRaces(cars: cars)

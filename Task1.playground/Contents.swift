@@ -27,7 +27,7 @@ class Car {
         } else if self.speed < car2.speed {
             return car2
         } else {
-            return Car(brand: "None", model: "None", year: 0, speed: 0) // Indicating a draw
+            return Car(brand: "None", model: "None", year: 0, speed: 0) 
         }
     }
 
@@ -37,7 +37,7 @@ class Car {
             return
         }
         
-        var raceCars = cars.shuffled() // Shuffle cars to create random pairs
+        var raceCars = cars.shuffled()
         var winners: [Car] = []
         
         while raceCars.count > 1 {
@@ -113,7 +113,7 @@ class AstonMartin: Car {
     }
 }
 
-// Создаем автомобили
+
 let bmw1 = BMW(model: "X5 M50d", year: 2018, speed: 250, enginePower: 400)
 let bmw2 = BMW(model: "X3 30d", year: 2017, speed: 240, enginePower: 265)
 let audi1 = Audi(model: "RS6 C7", year: 2018, speed: 260, numOfSeats: 5)
@@ -123,8 +123,8 @@ let toyota2 = Toyota(model: "Supra", year: 2020, speed: 280, fuelTankVol: 50)
 let astonMartin1 = AstonMartin(model: "V8 Vantage", year: 2017, speed: 314, driveUnit: "Rear drive")
 let astonMartin2 = AstonMartin(model: "DB11", year: 2019, speed: 322, driveUnit: "Rear drive")
 
-// Список всех автомобилей
+
 var cars: [Car] = [bmw1, bmw2, audi1, audi2, toyota1, toyota2, astonMartin1, astonMartin2]
 
-// Проведение гонок
+
 Car.organizeRaces(cars: cars)
